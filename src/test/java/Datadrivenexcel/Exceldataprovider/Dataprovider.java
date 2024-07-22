@@ -3,6 +3,8 @@ package Datadrivenexcel.Exceldataprovider;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -12,15 +14,19 @@ import org.testng.annotations.Test;
 public class Dataprovider {
 	
 	//For Git Refer the Excel file attached in the Excel Branch.
+	//And provide the path in FileInputStream.
+	
+	//There is one class called DataFormatter to change the data type from any of it to string. Defined by Apachi POI.
+	DataFormatter formatter = new DataFormatter();
 	
 	@Test(dataProvider="driverTest")
-	public void testCaseData(String one, String two, String three) {
-		System.out.println(one + " , " + two + " , " + three);
+	public void testCaseData(String Greeting, String Communication, String Id) {
+		System.out.println(Greeting + " , " + Communication + " , " + Id);
 	}
 	
 	
 	@DataProvider(name="driverTest")
-	public void getDate() throws IOException {
+	public Object[][] getDate() throws IOException {
 		//Object is a superset of all the data types.
 		//Object[][] data = {{"Hello One", "Text One", "1"}, {"Hello Two", "Text Two", "2"}, {"Hello Three", "Text Three", "3"}};
 		
@@ -63,9 +69,13 @@ public class Dataprovider {
 				//then after every row get me the cell
 				//When you pass the index it shall get the cell for that perticular row.
 				//Once we captured the data for each row, we shall store it in our multidimensional array.
-				data[i][j] = row.getCell(j);
+				//We can have any type of data in the excel, so we have to make sure that we need to first conver them into String.
+				//Then store it into the multidimensional array.
+				XSSFCell cell = row.getCell(j);
+				data[i][j] = formatter.formatCellValue(cell);
 			}
 		}
+		return data;
 		
 	}
 }

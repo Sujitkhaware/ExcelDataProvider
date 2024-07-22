@@ -24,6 +24,7 @@ public class Excel {
 			System.out.println("Outer loop started");
 			row = sheet.getRow(i + 1);
 			for (int j = 0; j < columnCount; j++) {
+				
 				System.out.println(row.getCell(j));
 			}
 			System.out.println("Outer loop ended");
